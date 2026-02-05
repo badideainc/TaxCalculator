@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <title>Tax Calculator</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
 
   <!-- Minimal styling -->
   <style>
@@ -17,54 +17,51 @@
 
   <!-- Axios CDN -->
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
 </head>
+
 <body>
   <h1>Tax Calculator</h1>
 
-  <form id="tax-form">
-    <label>
-      Employment income
-      <input type="number" id="input-empl" step="any" required />
-    </label>
 
-    <label>
-      Savings income
-      <input type="number" id="input-savings" step="any" required />
-    </label>
+  <h2>Incomes inputted</h2>
 
-    <button type="button" onclick="calculate()">Preview</button>
+  Employment: <div id="feedbackempl">{{ session['empl'] }}</div>
+  <br>
+  Interest: <div id="feedbacksavings">{{ session['savings'] }}</div>
 
-  </form>
 
-  <div id="feedbackempl"></div>
-  <div id="feedbacksavings"></div>
+ <br>
+ <br>
 
-   <script>
-    let feedback1 = document.getElementById("feedbackempl");
-    let feedback2= document.getElementById("feedbacksavings");
+ 
+ <button type="button" onclick="save()">Save</button>
 
-    function calculate() {
-      const a = document.getElementById('input-empl').value;
-      const b = document.getElementById('input-savings').value;
-      feedback1.textContent = feedback2.textContent = "";
 
-      axios.post("/api/calcTax", {a, b}).then( res => {
-        feedback1.className = feedback2.className = "result";
+<div id="feedbacksaved"></div>
 
-        window.location.href = "/confirm";
+<div id="tax-emp"></div>
+<div id="tax-saving"></div>
 
-      }).
-      catch (err => displayError(err));
-    }
+<script>
+    let feedback1 = document.getElementById("feedbacksaved");
+    let feedback2 = document.getElementById("tax-emp");
+    let feedback3 = document.getElementById("tax-saving");
 
     function save() {
-      const a = document.getElementById('input-empl').value;
-      const b = document.getElementById('input-savings').value;
-      feedback1.textContent = feedback2.textContent = "";
+      const a = document.getElementById('feedbackempl').textContent;
+      const b = document.getElementById('feedbacksavings').textContent;
+      feedback1.textContent = "";
       
       axios.post("/api/saveTax", {a, b}).then( res => {
-        feedback1.className = feedback2.className = "result";
-        feedback1.textContent = "Saved successfully";
+        feedback1.className = "result";
+        feedback1.textContent = `${res.data.message}`;
+
+        feedback2.className = "result";
+        feedback2.textContent = `Tax on income: ${res.data.taxIncome}`;
+
+        feedback3.className = "result";
+        feedback3.textContent = `Tax on savings: ${res.data.taxSavings}`;
       }).
       catch (err => displayError(err));
     }
@@ -93,5 +90,6 @@
     }    
     
   </script>
+
 </body>
 </html>
