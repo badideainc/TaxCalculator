@@ -32,13 +32,7 @@
       <input type="number" id="input-savings" step="any" required />
     </label>
 
-    <label>
-      Bonus income
-      <input type="number" id="input-bonus" step="any" />
-    </label>
-
-    <button type="button" onclick="calculate()">Calculate</button>
-    <button type="button" onclick="save()">Save</button>
+    <button type="button" onclick="calculate()">Preview</button>
 
   </form>
 
@@ -57,11 +51,11 @@
       const c = document.getElementById('input-bonus').value;
       feedback1.textContent = feedback2.textContent = feedback3.textContent = "";
 
-      axios.post("/api/calcTax", {a, b, c}).then( res => {
-        feedback1.className = feedback2.className = feedback3.className = "result";
-        feedback1.textContent = `Tax on income: ${res.data.taxIncome}`;
-        feedback2.textContent = `Tax on savings: ${res.data.taxSavings}`;
-        feedback3.textContent = `Bonus income: ${res.data.bonusIncome}`;
+      axios.post("/api/calcTax", {a, b}).then( res => {
+        feedback1.className = feedback2.className = "result";
+
+        window.location.href = "/confirm";
+
       }).
       catch (err => displayError(err));
     }

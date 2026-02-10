@@ -17,7 +17,11 @@ def retrieveIncomes():
         print(row)
     return rows
 
+def deleteIncomes():
+    connection = sqlite3.connect("taxcalculator.db")
+    cursor = connection.cursor()
+    cursor.execute("DELETE FROM Incomes")    
+    connection.commit()
 
 if __name__ == "__main__":
-    addIncomes(1, 30000, 1250)
     retrieveIncomes()
